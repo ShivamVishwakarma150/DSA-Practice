@@ -19,11 +19,12 @@ public class _13_firstIndex_O {
     public static int firstIndex(int[]arr,int idx,int x){
         if(idx==arr.length) return -1;// Base Case
 
+        // Meeting faith with Expectation
+        if(arr[idx]==x) return idx;
+
         // Faith
         int val=firstIndex(arr, idx+1, x);
 
-        // Meeting faith with Expectation
-        if(arr[idx]==x) return idx;
         // val==-1 or val
         return val;
     }
