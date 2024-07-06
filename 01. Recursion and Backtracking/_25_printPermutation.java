@@ -15,7 +15,7 @@ public class _25_printPermutation {
         }
 
         // i=0 -> abc -> printPemutation(0,abc,a);
-        // i=1 -> ac-> printPemutation(1,bc,ab);
+        // i=1 -> bc-> printPemutation(1,bc,ab);
         // i=2 -> c-> printPemutation(2,c,abc);
         for(int i=0;i<input.length();i++){//abc
             // i-> a
