@@ -9,13 +9,13 @@ public class _29_targetSumSubsets {
             arr[i] = sc.nextInt();
         }
         int tar=sc.nextInt();
-        printTargetSumSubsets(arr,0,"",tar,tar);
+        printTargetSumSubsets(arr,0,"",tar);
         sc.close();
 
     }
 
     // Solved by me
-    public static void printTargetSumSubsets(int[] arr, int idx, String output, int rem, int tar) {
+    public static void printTargetSumSubsets(int[] arr, int idx, String output, int rem) {
 
         // base case
         if(rem==0){
@@ -30,9 +30,9 @@ public class _29_targetSumSubsets {
 
         // MFE
         if(idx<arr.length){
-            printTargetSumSubsets(arr, idx+1, output+arr[idx]+",", rem-arr[idx], tar);
+            printTargetSumSubsets(arr, idx+1, output+arr[idx]+",", rem-arr[idx]);
             
-            printTargetSumSubsets(arr, idx+1, output, rem, tar);
+            printTargetSumSubsets(arr, idx+1, output, rem);
         }
     }
 
