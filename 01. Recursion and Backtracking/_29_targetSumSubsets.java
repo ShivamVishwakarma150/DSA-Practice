@@ -9,7 +9,7 @@ public class _29_targetSumSubsets {
             arr[i] = sc.nextInt();
         }
         int tar=sc.nextInt();
-        printTargetSumSubsets(arr,0,"",tar);
+        printTargetSumSubsets2(arr,0,"",tar);
         sc.close();
 
     }
