@@ -119,7 +119,7 @@ public class KnightTour {
             return;
         }
 
-        // Possible moves of the knight
+        // Possible moves of the knight in clockwise order starting from (r - 2, c + 1)
         int[] rowMoves = {-2, -1, 1, 2, 2, 1, -1, -2};
         int[] colMoves = {1, 2, 2, 1, -1, -2, -2, -1};
 
