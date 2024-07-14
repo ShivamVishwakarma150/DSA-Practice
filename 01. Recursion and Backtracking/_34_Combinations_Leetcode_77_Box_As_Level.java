@@ -1,7 +1,8 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class _34_Combinations_Leetcode_77 {
+// Combination Box as Level
+public class _34_Combinations_Leetcode_77_Box_As_Level {
     public void combine(List<List<Integer>> combinations, List<Integer> combination,
             int currentBox, int n, int k) {
 
