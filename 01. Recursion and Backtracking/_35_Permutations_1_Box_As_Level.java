@@ -9,7 +9,7 @@
 
 import java.util.Scanner;
 
-public class _35_Permutations_Box_As_Level {
+public class _35_Permutations_1_Box_As_Level {
     public static void main(String[] args) {
         Scanner sc=new Scanner(System.in);
         int n=sc.nextInt();
