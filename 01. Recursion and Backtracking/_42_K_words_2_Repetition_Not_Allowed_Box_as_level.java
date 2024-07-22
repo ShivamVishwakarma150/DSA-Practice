@@ -11,8 +11,8 @@ public class _42_K_words_2_Repetition_Not_Allowed_Box_as_level {
             // If the number of selected characters equals the desired size, print the combination
             if (ssf == ts) {
                 System.out.println(asf);
-                return;
             }
+            return;
         }
 
         char ch = ustr.charAt(i);
