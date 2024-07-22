@@ -2,7 +2,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Scanner;
 
-public class _41_K_Words_Repitition_Not_Allowed{
+public class _41_K_Words_1_Repitition_Not_Allowed_Item_as_Level{
     public static void combinations(ArrayList<Character> chs,int lastIdx,String asf,int k){
 
         if(k==asf.length()){
