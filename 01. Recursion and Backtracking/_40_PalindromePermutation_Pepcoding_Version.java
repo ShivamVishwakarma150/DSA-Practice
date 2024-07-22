@@ -25,6 +25,7 @@ public class _40_PalindromePermutation_Pepcoding_Version {
             */
 
             freq.put(ch, freq.getOrDefault(ch, 0) + 1);
+            scn.close();
         }
 
         // Check for characters with odd frequency
@@ -54,7 +55,6 @@ public class _40_PalindromePermutation_Pepcoding_Version {
 
         // Generate the palindrome permutations
         generatepw(0, freq, permutation);
-        scn.close();
     }
 
     public static void generatepw(int cb, HashMap<Character, Integer> freq, StringBuilder permutation) {
