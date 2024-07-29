@@ -9,3 +9,6 @@
 
 # coin change | Combinations sum 1 Infinite supply
 ![alt text](image-3.png)
+
+# 2d Combinations - 1
+![alt text](image-4.png)
