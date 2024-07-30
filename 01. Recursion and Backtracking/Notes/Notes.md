@@ -91,3 +91,132 @@ In a traditional 2D array or matrix traversal, you have two indices: `row` and `
 3. **Generalization:** This method is easily adaptable to other grid-based problems where the grid can be flattened into a 1D array.
 
 In summary, this approach linearizes the board traversal, making the implementation more straightforward and avoiding the complexity of managing two separate indices (`row` and `column`). The specific conditions (`cellNo == tq * tq` and `cellNo % tq == tq - 1`) are used to manage the end-of-board and end-of-row scenarios, respectively.
+
+
+# 2d combinations queen as level (Item as level)
+![alt text](image-6.png)
+
+### Concept: "Queen as Level" or "Item as Level"
+
+In this approach, each recursive level corresponds to placing a specific queen (or item). The goal is to place the `qpsf`-th queen on the board, exploring all possible positions for this queen before moving to the next.
+
+### How the Code Implements This Concept
+
+1. **Function Parameters**:
+   - `qpsf` (`Queens Placed So Far`): Indicates the current queen being placed.
+   - `tq` (`Total Queens`): Total number of queens to place, equal to the size of the board (`n`).
+   - `chess`: The chessboard as a 2D array.
+   - `lastQueenRow` and `lastQueenCol`: The last placed queen's position. These help to ensure the next queen is not placed before the last one, maintaining an order.
+
+2. **Base Case**:
+   - When `qpsf == tq`, all queens have been placed. The board configuration is printed.
+
+3. **Recursive Case**:
+   - The function tries to place the current queen (`qpsf`) in all possible positions starting from `lastQueenRow` and `lastQueenCol + 1` in the same row, and then from the next rows.
+   - **Same Row Placement**: It starts placing the current queen from `lastQueenCol + 1` in the same row (`lastQueenRow`), ensuring it does not place another queen in the same position or before it in the row.
+   - **Next Rows Placement**: After exploring the current row, it moves to the next row (`lastQueenRow + 1`) and iterates through all columns from the beginning (`j = 0`).
+
+4. **Backtracking**:
+   - After placing a queen and making the recursive call, the function removes the queen (`chess[i][j] = '-'`) to explore other possible placements.
+
+### Key Advantages of "Queen as Level" Approach
+
+1. **Simplicity**: By treating each queen as a level, the code naturally ensures that each queen is placed exactly once and in a specific order. This reduces the complexity of ensuring all queens are placed.
+2. **Ease of Backtracking**: When you backtrack, you only need to undo the placement of the current queen without worrying about other placements.
+
+### Example Walkthrough
+
+For a 2x2 board (`n = 2`), the recursive calls would explore all possible ways to place two queens:
+
+1. **First Queen**:
+   - Attempt to place in `(0,0)`, then `(0,1)`.
+   - Then move to `(1,0)`, and finally `(1,1)`.
+
+2. **Second Queen**:
+   - After placing the first queen, the second queen is placed in all remaining positions, respecting the order determined by `lastQueenRow` and `lastQueenCol`.
+
+The result is that all possible combinations of queen placements are explored, and the function prints each configuration.
+
+This "queen as level" approach is a good technique for problems where you want to explore combinations or placements of distinct items (like queens, knights, or even other types of items) on a grid or board. It ensures that each item is considered individually and placed in all possible valid positions.
+
+Here's your code with detailed comments explaining the logic and steps:
+
+```java
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+public class _50_2D_Combiantion_QOL_Item_as_level {
+
+    // This method generates all combinations of placing tq queens on an n x n board
+    public static void queensCombinations(int qpsf, int tq, Character[][] chess, int lastQueenRow, int lastQueenCol) {
+        // Base case: if the number of queens placed so far equals the total number of queens
+        if (qpsf == tq) {
+            // Print the current configuration of the chess board
+            for (int i = 0; i < tq; i++) {
+                for (int j = 0; j < tq; j++) {
+                    System.out.print(chess[i][j] + "\t");
+                }
+                System.out.println();
+            }
+            System.out.println();
+            return;
+        }
+
+        // Try to place the current queen in the remaining cells of the current row
+        for (int j = lastQueenCol + 1; j < tq; j++) {
+            if (chess[lastQueenRow][j] == '-') { // Check if the cell is empty
+                chess[lastQueenRow][j] = 'q'; // Place the queen
+                // Recur to place the next queen
+                queensCombinations(qpsf + 1, tq, chess, lastQueenRow, j);
+                chess[lastQueenRow][j] = '-'; // Backtrack: remove the queen
+            }
+        }
+
+        // Try to place the current queen in the cells of the subsequent rows
+        for (int i = lastQueenRow + 1; i < tq; i++) {
+            for (int j = 0; j < tq; j++) {
+                if (chess[i][j] == '-') { // Check if the cell is empty
+                    chess[i][j] = 'q'; // Place the queen
+                    // Recur to place the next queen
+                    queensCombinations(qpsf + 1, tq, chess, i, j);
+                    chess[i][j] = '-'; // Backtrack: remove the queen
+                }
+            }
+        }
+    }
+
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int n = Integer.parseInt(br.readLine()); // Read the board size (n)
+        Character[][] chess = new Character[n][n]; // Initialize the chess board
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                chess[i][j] = '-'; // Set all cells to empty
+            }
+        }
+
+        // Start the recursion with no queens placed, on an empty board
+        queensCombinations(0, n, chess, 0, -1);
+    }
+}
+```
+
+### Key Points Highlighted in Comments:
+
+1. **Base Case**: The base case checks if the number of queens placed so far (`qpsf`) is equal to the total number of queens (`tq`). If true, it means a valid configuration is found, and the board is printed.
+
+2. **Placing Queens in the Current Row**:
+   - The first for-loop attempts to place a queen in the same row as the last placed queen (`lastQueenRow`), starting from the column immediately after `lastQueenCol`.
+   - This ensures queens are placed in a non-overlapping manner in the current row.
+
+3. **Placing Queens in Subsequent Rows**:
+   - The second set of nested loops attempts to place the next queen in the rows below the last placed queen (`lastQueenRow + 1`), starting from the first column (`j = 0`).
+   - This loop covers all possible placements of the current queen in the rows below the last placed queen.
+
+4. **Backtracking**:
+   - After placing a queen and making a recursive call to place the next queen, the code removes the queen (`chess[lastQueenRow][lastQueenCol] = '-'`) to explore other configurations. This is known as backtracking.
+
+5. **Initialization and Input**:
+   - The `main` method initializes the chessboard with `'-'` (indicating empty cells) and reads the board size `n` from the input. It then starts the recursive process by calling `queensCombinations`.
+
+This code effectively demonstrates how to use recursion and backtracking to explore all possible configurations of placing queens on an `n x n` board, treating each queen as a level in the recursive exploration.
