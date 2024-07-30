@@ -220,3 +220,79 @@ public class _50_2D_Combiantion_QOL_Item_as_level {
    - The `main` method initializes the chessboard with `'-'` (indicating empty cells) and reads the board size `n` from the input. It then starts the recursive process by calling `queensCombinations`.
 
 This code effectively demonstrates how to use recursion and backtracking to explore all possible configurations of placing queens on an `n x n` board, treating each queen as a level in the recursive exploration.
+
+# 2D_Combiantion as 1D Item as Level or Queen as Level
+
+Here's your provided code with added comments to explain the logic and steps, and I've made necessary corrections to ensure the code compiles and functions correctly:
+
+```java
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+public class Main {
+
+    // Method to generate all combinations of placing tq queens on an n x n chessboard
+    public static void queensCombinations(int qpsf, int tq, Character[][] chess, int lastCellNo) {
+        // Base case: when the number of queens placed so far equals the total number of queens
+        if (qpsf == tq) {
+            // Print the current configuration of the chessboard
+            for (int i = 0; i < tq; i++) {
+                for (int j = 0; j < tq; j++) {
+                    System.out.print(chess[i][j] + "\t");
+                }
+                System.out.println();
+            }
+            System.out.println();
+            return;
+        }
+
+        // Try to place the current queen in the remaining cells after lastCellNo
+        for (int c = lastCellNo + 1; c < tq * tq; c++) {
+            int rowNo = c / tq;  // Calculate the row number
+            int colNo = c % tq;  // Calculate the column number
+            chess[rowNo][colNo] = 'q';  // Place the queen at the calculated position
+            // Recur to place the next queen
+            queensCombinations(qpsf + 1, tq, chess, c);
+            chess[rowNo][colNo] = '-';  // Backtrack: remove the queen
+        }
+    }
+
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int n = Integer.parseInt(br.readLine());  // Read the board size (n)
+        Character[][] chess = new Character[n][n];  // Initialize the chessboard
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                chess[i][j] = '-';  // Set all cells to empty
+            }
+        }
+
+        // Start the recursion with no queens placed, starting from cell number -1
+        queensCombinations(0, n, chess, -1);
+    }
+}
+```
+
+### Explanation of Key Points in the Code:
+
+1. **Base Case (Line 8)**:
+   - If `qpsf` (Queens Placed So Far) equals `tq` (Total Queens), it indicates that all queens have been placed. The function prints the current configuration of the chessboard.
+
+2. **Main Loop for Placement (Line 19)**:
+   - The loop iterates over all possible cell numbers starting from `lastCellNo + 1` up to `tq * tq` (which represents the total number of cells on the board). The variable `c` represents the linearized cell number.
+
+3. **Row and Column Calculation (Lines 20-21)**:
+   - `rowNo` and `colNo` are calculated using the linearized cell number `c`. This ensures that the cells are traversed in row-major order.
+   - `rowNo = c / tq` calculates the row index by integer division.
+   - `colNo = c % tq` calculates the column index using the modulus operator.
+
+4. **Queen Placement and Backtracking (Lines 22-26)**:
+   - The queen is placed at the position `(rowNo, colNo)`.
+   - The function then recursively calls `queensCombinations` with `qpsf + 1` and the current cell number `c`.
+   - After returning from the recursion, the code backtracks by removing the queen from `(rowNo, colNo)`.
+
+5. **Initialization and Input (Lines 29-35)**:
+   - The `main` method initializes the chessboard and sets all cells to `'-'` to indicate they are empty.
+   - The initial call to `queensCombinations` starts with no queens placed (`qpsf = 0`) and begins the search from an invalid cell number (`-1`), ensuring the first queen is placed in cell `0`.
+
+This approach, using `lastCellNo` and linearized cell numbers, is an efficient way to ensure that queens are placed without revisiting previously considered positions and allows for straightforward backtracking. This method is especially useful in scenarios where the board or grid is large, and a more structured approach is needed to systematically explore all combinations.
