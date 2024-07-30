@@ -296,3 +296,94 @@ public class Main {
    - The initial call to `queensCombinations` starts with no queens placed (`qpsf = 0`) and begins the search from an invalid cell number (`-1`), ensuring the first queen is placed in cell `0`.
 
 This approach, using `lastCellNo` and linearized cell numbers, is an efficient way to ensure that queens are placed without revisiting previously considered positions and allows for straightforward backtracking. This method is especially useful in scenarios where the board or grid is large, and a more structured approach is needed to systematically explore all combinations.
+
+# 2d Queen Permutation Box on Level
+![alt text](image-7.png)
+
+# 2d Queen Permutation Item on Level / Queen on Level
+![alt text](image-8.png)
+
+# 2D Permutation as 1D Box on level
+
+
+```java
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+public class Main {
+    // Method to generate permutations of placing queens on an n x n chessboard
+    public static void queensPermutations(int qpsf, int tq, int cellNo, String mat, boolean[] vis) {
+        // Base case: if all cells are processed
+        if (cellNo == tq * tq) {
+            // Check if the number of queens placed matches the total queens needed
+            if (qpsf == tq) {
+                // Print the current permutation of the board
+                System.out.println(mat);
+                System.out.println();
+            }
+            return;
+        }
+
+        // If we're at the last cell of the current row
+        if (cellNo % tq == tq - 1) {
+            // Iterate through all possible queens to place in this row
+            for (int i = 0; i < tq; i++) {
+                if (!vis[i]) { // If this queen hasn't been placed yet
+                    vis[i] = true; // Mark the queen as placed
+                    // Place the queen and move to the next row (newline after the queen)
+                    queensPermutations(qpsf + 1, tq, cellNo + 1, mat + "q" + (i + 1) + "\t\n", vis);
+                    vis[i] = false; // Backtrack: unmark the queen as placed
+                }
+            }
+            // Place an empty cell at the end of the row and move to the next row
+            queensPermutations(qpsf, tq, cellNo + 1, mat + "-\t\n", vis);
+        } else {
+            // Iterate through all possible queens to place in this cell
+            for (int i = 0; i < tq; i++) {
+                if (!vis[i]) { // If this queen hasn't been placed yet
+                    vis[i] = true; // Mark the queen as placed
+                    // Place the queen and continue in the same row
+                    queensPermutations(qpsf + 1, tq, cellNo + 1, mat + "q" + (i + 1) + "\t", vis);
+                    vis[i] = false; // Backtrack: unmark the queen as placed
+                }
+            }
+            // Place an empty cell and continue in the same row
+            queensPermutations(qpsf, tq, cellNo + 1, mat + "-\t", vis);
+        }
+    }
+
+    public static void main(String[] args) throws Exception {
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int n = Integer.parseInt(br.readLine()); // Read the number of queens (n) from input
+        boolean[] queens = new boolean[n]; // Boolean array to track if each queen has been placed
+        // Start generating permutations with 0 queens placed, n queens total, starting from cell 0, and an empty board state
+        queensPermutations(0, n, 0, "", queens);
+    }
+}
+```
+
+### Detailed Explanation:
+
+1. **Main Class and Method**:
+   - `BufferedReader br = new BufferedReader(new InputStreamReader(System.in));`: Reads the number of queens (`n`) from standard input.
+   - `boolean[] queens = new boolean[n];`: Initializes a boolean array `queens` to track whether each queen (1 through `n`) has been placed on the board.
+
+2. **queensPermutations Method**:
+   - **Parameters**:
+     - `qpsf` (Queens Placed So Far): Counts the number of queens currently placed on the board.
+     - `tq` (Total Queens): The total number of queens to place.
+     - `cellNo`: The current cell number being processed (0-indexed).
+     - `mat`: A string representing the current state of the board layout.
+     - `vis` (Visited): A boolean array tracking whether a particular queen has been placed on the board.
+
+   - **Base Case**: `if (cellNo == tq * tq)`: When all cells have been processed, the method checks if the number of placed queens matches the total queens (`qpsf == tq`). If true, it prints the current board configuration.
+
+   - **Row End Case**:
+     - `if (cellNo % tq == tq - 1)`: This condition checks if the current cell is the last cell in the row.
+     - The inner loop iterates over all queens to find a place for each unplaced queen in the current row. If a queen is placed, the method recursively processes the next cell and row.
+     - After attempting to place a queen, the method marks the cell as empty (`"-\t\n"`) and moves to the next row.
+
+   - **General Case**:
+     - For cells that are not at the end of a row, the process is similar, but without adding a newline after placing a queen or leaving the cell empty.
+
+This recursive approach generates all possible permutations of placing `n` queens on an `n x n` chessboard, ensuring that each queen is placed only once per permutation.
