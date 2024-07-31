@@ -387,3 +387,186 @@ public class Main {
      - For cells that are not at the end of a row, the process is similar, but without adding a newline after placing a queen or leaving the cell empty.
 
 This recursive approach generates all possible permutations of placing `n` queens on an `n x n` chessboard, ensuring that each queen is placed only once per permutation.
+
+# Subsets II (unique subsets) Item on Level
+![alt text](image-9.png)
+
+Here's the code with detailed comments explaining the logic:
+
+```java
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+public class SubsetFinder {
+    // List to store all unique subsets
+    private List<List<Integer>> ans = new ArrayList<>();
+
+    // Recursive function to generate subsets
+    public void subsets(int currentItem, ArrayList<Integer> unique,
+                        HashMap<Integer, Integer> freq, List<Integer> res) {
+        // Base case: if we have processed all unique items, add the current subset to the result list
+        if (currentItem == unique.size()) {
+            ans.add(new ArrayList<>(res));
+            return;
+        }
+
+        // Get the current unique value
+        int val = unique.get(currentItem);
+
+        // Case 1: Do not include the current item in the subset
+        subsets(currentItem + 1, unique, freq, res); 
+
+        // Case 2: Include the current item `f` times in the subset, where 0 <= f < freq[val]
+        for (int f = 0; f < freq.get(val); f++) {
+            res.add(val); // Add the current item to the subset
+            subsets(currentItem + 1, unique, freq, res); // Recursive call with next item
+        }
+
+        // Backtrack: remove the added items from the subset before returning
+        for (int f = 0; f < freq.get(val); f++) {
+            res.remove(res.size() - 1);
+        }
+    }
+
+    // Main function to initialize the unique list and frequency map, and start the subset generation
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
+        ArrayList<Integer> unique = new ArrayList<>();
+        HashMap<Integer, Integer> freq = new HashMap<>();
+
+        // Count frequency of each element and collect unique elements
+        for (int val : nums) {
+            if (freq.containsKey(val)) {
+                freq.put(val, freq.get(val) + 1); // Increment frequency if already in map
+            } else {
+                freq.put(val, 1); // Initialize frequency to 1 for a new element
+                unique.add(val); // Add to unique elements list
+            }
+        }
+
+        // Start generating subsets from the 0th index
+        subsets(0, unique, freq, new ArrayList<>());
+        return ans; // Return the list of unique subsets
+    }
+
+    public static void main(String[] args) {
+        SubsetFinder sf = new SubsetFinder();
+        int[] nums = {1, 2, 2};
+        List<List<Integer>> result = sf.subsetsWithDup(nums);
+        System.out.println(result); // Print the result
+    }
+}
+```
+
+### Explanation:
+1. **Class and Fields**:
+   - `SubsetFinder` class contains the methods and fields required for finding subsets.
+   - `ans`: A list of lists to store all the unique subsets.
+
+2. **`subsets` Method**:
+   - A recursive method to generate subsets by considering each unique item and deciding whether to include it in the subset or not.
+   - **Base Case**: When `currentItem` reaches the size of the unique list, the current subset (`res`) is added to `ans`.
+   - **Recursive Calls**:
+     - First, it considers the case where the current item is not included in the subset.
+     - Then, it includes the current item `f` times (where `f` is from 0 to the frequency of the current item) and recursively generates subsets with the next unique item.
+   - **Backtracking**: After processing, it removes the added items from the subset to explore other possibilities.
+
+3. **`subsetsWithDup` Method**:
+   - Initializes the unique elements list and their frequencies.
+   - Iterates through the input array `nums`, populating the `freq` map with the frequency of each element and the `unique` list with distinct elements.
+   - Calls the `subsets` method to start the subset generation process.
+
+4. **`main` Method**:
+   - Demonstrates the usage of the `SubsetFinder` class by creating an instance, calling the `subsetsWithDup` method, and printing the result.
+
+This code is designed to handle duplicates by counting the frequency of each unique element and controlling the number of times each element is included in the subsets.
+
+
+# Subsets II (unique subsets) Box on Level
+![alt text](image-10.png)
+
+we are using a "box on level" approach to generate unique subsets, where you consider each unique item and decide how many times to include it in the current subset. Here’s the corrected and complete code with explanations:
+
+```java
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
+public class Solution {
+
+    List<List<Integer>> ans = new ArrayList<>();
+
+    // Recursive method to generate subsets
+    public void subsets(int lastItem, ArrayList<Integer> unique, HashMap<Integer, Integer> freq, List<Integer> res) {
+        // Add the current subset to the list of answers
+        ans.add(new ArrayList<>(res));
+
+        // Iterate over the unique items starting from lastItem
+        for (int i = lastItem; i < unique.size(); i++) {
+            int val = unique.get(i);
+            int oldFreq = freq.get(val); // Get the frequency of the current item
+
+            // Only proceed if the item can still be added to the subset
+            if (oldFreq > 0) {
+                freq.put(val, oldFreq - 1); // Decrease the frequency of the current item
+                res.add(val); // Add the current item to the subset
+
+                // Recurse with the updated parameters
+                subsets(i, unique, freq, res);
+
+                // Backtrack: remove the last item and restore its frequency
+                res.remove(res.size() - 1);
+                freq.put(val, oldFreq);
+            }
+        }
+    }
+
+    // Method to initialize data structures and start the recursion
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
+        ArrayList<Integer> unique = new ArrayList<>();
+        HashMap<Integer, Integer> freq = new HashMap<>();
+
+        // Count frequency of each element and collect unique elements
+        for (int val : nums) {
+            if (freq.containsKey(val)) {
+                freq.put(val, freq.get(val) + 1); // Increment frequency if already present
+            } else {
+                freq.put(val, 1); // Initialize frequency to 1 for a new element
+                unique.add(val); // Add to the unique list
+            }
+        }
+
+        // Start the recursion with initial parameters
+        subsets(0, unique, freq, new ArrayList<>());
+        return ans;
+    }
+
+    public static void main(String[] args) {
+        Solution solution = new Solution();
+        int[] nums = {1, 2, 2};
+        List<List<Integer>> result = solution.subsetsWithDup(nums);
+        System.out.println(result); // Print the result
+    }
+}
+```
+
+### Explanation:
+1. **Class and Fields**:
+   - The `Solution` class contains the main methods and fields for generating subsets.
+   - `ans`: A list to store all the unique subsets generated.
+
+2. **`subsets` Method**:
+   - This is a recursive method that generates subsets by considering each unique item and its frequency.
+   - **Base Case**: Each recursive call adds the current subset (`res`) to `ans`.
+   - **Iteration and Recursive Calls**: It iterates over the unique items starting from `lastItem` and tries to include each item in the subset. The frequency is decreased when an item is added, and the `subsets` method is called recursively with the updated list.
+   - **Backtracking**: After each recursive call, the last added item is removed from `res`, and its frequency is restored in `freq`.
+
+3. **`subsetsWithDup` Method**:
+   - Initializes the `unique` list and `freq` map.
+   - Iterates through the input array `nums` to populate `freq` with the frequency of each element and `unique` with distinct elements.
+   - Calls the `subsets` method to generate the subsets starting from the first unique item.
+
+4. **`main` Method**:
+   - Demonstrates the usage of the `Solution` class by creating an instance, calling the `subsetsWithDup` method, and printing the result.
+
+This implementation effectively handles duplicates by tracking the frequency of each unique element and ensuring each subset is generated only once.
