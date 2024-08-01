@@ -570,3 +570,103 @@ public class Solution {
    - Demonstrates the usage of the `Solution` class by creating an instance, calling the `subsetsWithDup` method, and printing the result.
 
 This implementation effectively handles duplicates by tracking the frequency of each unique element and ensuring each subset is generated only once.
+
+<br/>
+<br/>
+<br/>
+
+# Rat in Maze 
+![alt text](image-12.png)
+![alt text](image-13.png)
+
+```java
+import java.util.ArrayList;
+
+public class Solution {
+
+    // Method to perform flood fill and find all paths from top-left to bottom-right
+    public static void floodfill(int[][] maze, int sr, int sc, int[] x, int[] y, char[] ch, String asf, boolean[][] vis, ArrayList<String> ans) {
+        int dr = maze.length - 1;  // Destination row index
+        int dc = maze[0].length - 1;  // Destination column index
+
+        // Base case: if out of bounds, cell is blocked, or already visited
+        if (sr > dr || sc > dc || sr < 0 || sc < 0 || maze[sr][sc] == 0 || vis[sr][sc] == true) {
+            return; // Terminate this path
+        }
+
+        // Base case: reached the destination
+        if (sr == dr && sc == dc) {
+            ans.add(asf); // Add the path to the list of answers
+            return;
+        }
+
+        vis[sr][sc] = true; // Mark the current cell as visited
+
+        // Iterate over the possible moves
+        for (int i = 0; i < x.length; i++) {
+            // Recursive call for each direction
+            floodfill(maze, sr + x[i], sc + y[i], x, y, ch, asf + ch[i], vis, ans);
+        }
+
+        vis[sr][sc] = false; // Backtrack and unmark the current cell
+    }
+
+    // Method to initiate flood fill and find all paths
+    public ArrayList<String> findPath(int[][] mat) {
+        int n = mat.length; // Number of rows
+        int m = mat[0].length; // Number of columns
+        boolean[][] vis = new boolean[n][m]; // Visited array
+        int[] x = new int[]{-1, 0, 1, 0}; // Row direction offsets for U, L, D, R
+        int[] y = new int[]{0, -1, 0, 1}; // Column direction offsets for U, L, D, R
+        char[] ch = new char[]{'U', 'L', 'D', 'R'}; // Directions corresponding to the offsets
+        ArrayList<String> ans = new ArrayList<String>(); // List to store the paths
+
+        // Start flood fill from the top-left corner
+        floodfill(mat, 0, 0, x, y, ch, "", vis, ans);
+
+        return ans; // Return the list of paths
+    }
+
+    public static void main(String[] args) {
+        // Example usage
+        int[][] mat = {
+            {1, 0, 0, 0},
+            {1, 1, 0, 1},
+            {0, 1, 0, 0},
+            {1, 1, 1, 1}
+        };
+
+        Solution sol = new Solution();
+        ArrayList<String> paths = sol.findPath(mat);
+        System.out.println(paths);
+    }
+}
+```
+
+### Detailed Explanation:
+
+1. **Flood Fill Method (`floodfill`)**:
+   - **Parameters**:
+     - `int[][] maze`: The 2D array representing the maze, where `1` indicates a traversable cell and `0` indicates a blocked cell.
+     - `int sr, sc`: The current position in the maze (starting row and column).
+     - `int[] x, y`: Arrays that define the row and column offsets for the possible moves (up, left, down, right).
+     - `char[] ch`: Array representing the direction characters corresponding to the moves (`U` for up, `L` for left, `D` for down, `R` for right).
+     - `String asf`: The accumulated path string so far.
+     - `boolean[][] vis`: A 2D boolean array to keep track of visited cells.
+     - `ArrayList<String> ans`: List to store all valid paths from the top-left to bottom-right of the maze.
+   - **Base Cases**:
+     - If the current position is out of bounds, a blocked cell, or already visited, the method returns without proceeding further.
+     - If the current position is the destination cell (bottom-right corner), the current path (`asf`) is added to the `ans` list.
+   - **Recursive Calls**:
+     - For each possible direction (up, left, down, right), the method recursively calls itself to explore the next cell.
+     - The `asf` string is updated with the corresponding direction character.
+
+2. **Find Path Method (`findPath`)**:
+   - Initializes necessary variables and arrays for directions and visited cells.
+   - Calls the `floodfill` method starting from the top-left corner (0,0).
+   - Returns the list of paths found.
+
+3. **Main Method**:
+   - Provides an example maze and demonstrates how to use the `findPath` method to find all paths from the top-left to the bottom-right of the maze. The paths are printed to the console.
+
+This implementation uses a backtracking approach to explore all possible paths from the start to the destination while avoiding blocked or visited cells.
