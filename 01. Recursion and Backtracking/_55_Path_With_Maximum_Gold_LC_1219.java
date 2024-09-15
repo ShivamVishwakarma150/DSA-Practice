@@ -47,5 +47,6 @@ public class _55_Path_With_Maximum_Gold_LC_1219 {
         };
 
         System.out.println(findPath(mat));
+        
     }
 }
