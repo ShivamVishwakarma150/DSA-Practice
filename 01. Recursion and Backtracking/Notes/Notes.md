@@ -670,3 +670,131 @@ public class Solution {
    - Provides an example maze and demonstrates how to use the `findPath` method to find all paths from the top-left to the bottom-right of the maze. The paths are printed to the console.
 
 This implementation uses a backtracking approach to explore all possible paths from the start to the destination while avoiding blocked or visited cells.
+
+# Path with maximum gold
+
+![alt text](image-11.png)
+
+# Keypad combinations
+
+
+![alt text](image-14.png)
+
+
+# Generate Abbrevations
+
+![alt text](image-15.png)
+
+![alt text](image-16.png)
+
+```java
+import java.util.Scanner;
+
+public class _56_Generate_Abbrevations {
+    public static void solution(String str, String asf, int count) {
+        // write your code here
+        if (str.length() == 0) {
+            if (count > 0) {
+
+                System.out.println(asf + count);
+            } else {
+                System.out.println(asf);
+            }
+
+            return;
+        }
+
+        //yes
+        solution(str.substring(1), count > 0 ? asf + count + str.charAt(0) : asf + str.charAt(0), 0);
+
+        //No
+        solution(str.substring(1), asf, ++count);
+
+    }
+
+    public static void main(String[] args) {
+        Scanner scn = new Scanner(System.in);
+        String str = scn.nextLine();
+        solution(str, "", 0);
+    }
+}
+
+```
+
+This Java program generates all possible abbreviations of a given string. The idea is to either abbreviate a character or not while traversing the string, and the function `solution()` implements this using recursion.
+
+Let's break it down:
+
+### Code Explanation:
+
+1. **Base Case:**
+   ```java
+   if (str.length() == 0) {
+       if (count > 0) {
+           System.out.println(asf + count);
+       } else {
+           System.out.println(asf);
+       }
+       return;
+   }
+   ```
+   - If the string is empty (i.e., `str.length() == 0`), the base case is reached.
+   - If `count > 0`, it means that there are consecutive characters that were abbreviated, so the count is added to the result string (`asf`).
+   - Otherwise, the accumulated string (`asf`) is printed without adding any count.
+
+2. **Recursion:**
+   The two recursive calls represent two decisions:
+   
+   - **Yes Decision**: Abbreviate the current character.
+     ```java
+     solution(str.substring(1), count > 0 ? asf + count + str.charAt(0) : asf + str.charAt(0), 0);
+     ```
+     - In this case, if there is an ongoing abbreviation (`count > 0`), it appends the count and the current character to the `asf` string.
+     - It resets the count to `0` since the character is explicitly kept.
+
+   - **No Decision**: Continue abbreviating by increasing the `count`.
+     ```java
+     solution(str.substring(1), asf, ++count);
+     ```
+     - The character is skipped and the abbreviation count (`count`) is incremented.
+
+### Example Input/Output:
+
+For input `"abc"`:
+
+- The recursive function explores both abbreviating and not abbreviating each character, resulting in the following outputs:
+
+```
+3
+2c
+1b1
+1bc
+a2
+a1c
+ab1
+abc
+```
+
+### How It Works:
+- The first case `3` represents the abbreviation of the entire string.
+- `2c` means the first two characters are abbreviated, and the last character is kept.
+- `1b1` means the first character is abbreviated, the second is kept, and the third is abbreviated.
+- And so on, until the full string `abc` is printed without abbreviation.
+
+### Input/Output Example:
+```
+Input: 
+abc
+
+Output:
+3
+2c
+1b1
+1bc
+a2
+a1c
+ab1
+abc
+``` 
+
+This solution explores all possible ways of generating abbreviations by selectively including or skipping each character of the input string.
