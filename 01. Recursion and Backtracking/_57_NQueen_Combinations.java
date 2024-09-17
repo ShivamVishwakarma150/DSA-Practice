@@ -76,6 +76,7 @@ public class _57_NQueen_Combinations {
         if(isQueenSafe(r, c, vis)){
             vis[r][c] = true;
 
+            // Taking Queen
             if(c==vis.length-1){
                 nqueen(r+1, 0, qpsf+1, vis);
             }else{
@@ -85,10 +86,12 @@ public class _57_NQueen_Combinations {
 
             vis[r][c] = false;
         }
+
+        // Not Taking Queen
         if(c==vis.length-1){
-            nqueen(r+1, 0, qpsf+1, vis);
+            nqueen(r+1, 0, qpsf, vis);
         }else{
-            nqueen(r, c+1, qpsf+1, vis);
+            nqueen(r, c+1, qpsf, vis);
 
         }
 
