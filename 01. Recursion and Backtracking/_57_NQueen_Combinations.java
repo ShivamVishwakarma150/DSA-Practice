@@ -68,6 +68,7 @@ public class _57_NQueen_Combinations {
             return;
         }
 
+        // Edge Case or Base
         if(r==vis.length){
             return;
         }
