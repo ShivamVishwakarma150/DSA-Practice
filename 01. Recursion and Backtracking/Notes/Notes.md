@@ -798,3 +798,144 @@ abc
 ``` 
 
 This solution explores all possible ways of generating abbreviations by selectively including or skipping each character of the input string.
+
+# N Queen - Combination
+![alt text](image-17.png)
+
+![alt text](image-18.png)
+
+```java
+class Solution {
+        static List<List<String>> res;
+
+    public static boolean isQueenSafe(int row,int col,boolean[][]chess){
+
+        //row(left)
+        for(int j=0;j<col;j++){
+            if(chess[row][j]==true){
+                return false;
+            }
+        }
+
+         // upward column
+         for(int i=0;i<row;i++){
+            if(chess[i][col]==true){
+                return false;
+            }
+        }
+
+        // upward left Diagonal 
+        int i=row,j=col;
+        while(i>=0 && j>=0){
+            if(chess[i][j]==true){
+                return false;
+            }
+
+            i--; j--;
+        }
+
+        // Upward Right Diagonal
+        i=row;
+        j=col;
+
+        while(i>=0 && j<chess[0].length){
+            if(chess[i][j]==true){
+                return false;
+            }
+            i--; j++;
+        }
+
+
+        return true;
+    }
+
+    public static void nqueen(int r,int c,int qpsf,boolean[][] vis){
+        if(qpsf==vis.length){
+            List<String> ans=new ArrayList<>();
+            for(int i=0;i<vis.length;i++){
+                String curr="";
+                for(int j=0;j<vis.length;j++){
+                    if(vis[i][j] == true){
+                        curr = curr + "Q";
+                    }else{
+                        curr = curr+".";
+                    }
+                }
+                ans.add(curr);
+            }
+            res.add(ans);
+            return;
+        }
+
+        if(r==vis.length){
+            return;
+        }
+
+        if(isQueenSafe(r, c, vis)){
+            vis[r][c] = true;
+
+            if(c==vis.length-1){
+                nqueen(r+1, 0, qpsf+1, vis);
+            }else{
+                nqueen(r, c+1, qpsf+1, vis);
+
+            }
+
+            vis[r][c] = false;
+        }
+        if(c==vis.length-1){
+            nqueen(r+1, 0, qpsf, vis);
+        }else{
+            nqueen(r, c+1, qpsf, vis);
+
+        }
+
+
+    }
+
+    public List<List<String>> solveNQueens(int n) {
+        res = new ArrayList<>();
+        boolean[][] vis = new boolean[n][n];
+
+        nqueen(0,0,0,vis);
+        return res;
+    }
+}
+```
+
+This implementation aims to solve the N-Queens problem, where the objective is to place N queens on an N x N chessboard such that no two queens threaten each other. The provided class uses recursion and backtracking to explore possible placements of queens and returns all valid solutions.
+
+Here’s a breakdown of how the code works:
+
+### 1. **`isQueenSafe` Function**:
+   - This function checks whether placing a queen at the given row (`row`) and column (`col`) is safe.
+   - It ensures that no other queens are present:
+     - In the same row to the left of the current column.
+     - In the same column above the current row.
+     - In the upper left diagonal.
+     - In the upper right diagonal.
+   - If any of these conditions are violated, it returns `false`, indicating the position is not safe.
+
+### 2. **`nqueen` Function**:
+   - The core recursive backtracking function that attempts to place queens on the board.
+   - Parameters:
+     - `r` and `c`: represent the current row and column.
+     - `qpsf`: stands for "Queens placed so far" and tracks how many queens have been placed.
+     - `vis`: a 2D boolean array representing the chessboard, where `true` indicates a queen's position.
+   - **Base Case**:
+     - If `qpsf` equals `n` (i.e., N queens have been placed), it means a valid configuration has been found. The current configuration is then added to the result (`res`).
+   - **Recursive Case**:
+     - It checks if placing a queen at the current row and column is safe.
+     - If safe, it places a queen (`vis[r][c] = true`), then moves on to the next row (or column) depending on the current position.
+     - If not safe, or after exploring the recursive path, it backtracks by removing the queen (`vis[r][c] = false`) and explores other options.
+
+### 3. **`solveNQueens` Function**:
+   - This function initializes the `vis` board and calls the `nqueen` recursive function to start the process from row 0 and column 0 with 0 queens placed.
+   - After all valid solutions are found, it returns the result list `res`.
+
+### Code Refinement Suggestions:
+1. **Memory Optimization**:
+   - Instead of using a boolean array (`vis`), you could use a 1D array of integers to store the position of queens, which would save space.
+   
+2. **Improving the `isQueenSafe` Check**:
+   - Since the queens are being placed one per row, there's no need to check the entire row for safety. You could eliminate the row check and rely on column and diagonal checks.
