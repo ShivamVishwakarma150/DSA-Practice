@@ -939,3 +939,7 @@ Here’s a breakdown of how the code works:
    
 2. **Improving the `isQueenSafe` Check**:
    - Since the queens are being placed one per row, there's no need to check the entire row for safety. You could eliminate the row check and rely on column and diagonal checks.
+
+
+   # NQueen Permutation 
+   ![alt text](image-19.png)
