@@ -1,5 +1,4 @@
 import java.io.*;
-import java.util.*;
 
 public class _03_Display_Link_List {
   public static class Node {
